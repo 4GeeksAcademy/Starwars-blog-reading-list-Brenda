@@ -12,7 +12,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+
+			peopleStarWars: [],
+			planetsStarWars: [],
+			vehiclesStarWars: [],
+			favoritesStarWars: [],
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -37,7 +42,54 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+
+			// Fetching SW characters
+
+			fetchPeopleStarWars: () =>{
+				fetch('https://swapi.dev/api/people')
+				.then(response => response.json())
+				.then(data => {
+					setStore({peopleStarWars: data.results})
+				})
+				.catch(err => err)
+			},
+
+			// Fetching SW planets data
+
+			fetchPlanetsStarWars: () =>{
+				fetch('https://swapi.dev/api/planets')
+				.then(response => response.json())
+				.then(data => {
+					setStore({planetsStarWars: data.results})
+				})
+				.catch(err => err)
+			},
+
+			// Fetching SW vehicles data
+			fetchVehiclesStarWars: () =>{
+				fetch('https://swapi.dev/api/vehicles')
+				.then(response => response.json())
+				.then(data => {
+					setStore({vehiclesStarWars: data.results})
+				})
+				.catch(err => err)
+			},
+
+			
+			addFavorites: (newItem) => {
+				const store = getStore();
+				if (!store.favoritesStarWars.includes(newItem)) {
+					setStore({favoritesStarWars: [...store.favoritesStarWars, newItem]});
+				}
+			},
+			
+			removeFavorites: (item) => {
+				const store = getStore();
+				setStore({favoritesStarWars: store.favoritesStarWars.filter(favorite => favorite !== item)});
 			}
+			
+
 		}
 	};
 };
